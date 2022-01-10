@@ -15,44 +15,39 @@ const CurrencyConverter = () => {
 	const [secondaryCurrencyExchanged, setSecondaryCurrencyExchanged] =
 		useState("BTC");
 
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
-	const Convert = () => {
-		useEffect(() => {
-			const options = {
-				method: "GET",
-				url: "https://alpha-vantage.p.rapidapi.com/query",
-				params: {
-					from_currency: chosenPrimaryCurrency,
-					function: "CURRENCY_EXCHANGE_RATE",
-					to_currency: chosenSecondaryCurrency,
-				},
-				headers: {
-					"x-rapidapi-host": "alpha-vantage.p.rapidapi.com",
-					"x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY,
-				},
-			};
+	const convert = () => {
+		const options = {
+			method: "GET",
+			url: "https://alpha-vantage.p.rapidapi.com/query",
+			params: {
+				from_currency: chosenPrimaryCurrency,
+				function: "CURRENCY_EXCHANGE_RATE",
+				to_currency: chosenSecondaryCurrency,
+			},
+			headers: {
+				"x-rapidapi-host": "alpha-vantage.p.rapidapi.com",
+				"x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY,
+			},
+		};
 
-			axios
-				.request(options)
-				.then((response) => {
-					setExchangeRate(
-						response.data["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
-					);
-					setResult(
-						response.data["Realtime Currency Exchange Rate"][
-							"5. Exchange Rate"
-						] * amount
-					);
-					setPrimaryCurrencyExchanged(chosenPrimaryCurrency);
-					setSecondaryCurrencyExchanged(chosenSecondaryCurrency);
-					setLoading(true);
-					setTimeout(setLoading(false), 1500);
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-		}, []);
+		axios
+			.request(options)
+			.then((response) => {
+				setExchangeRate(
+					response.data["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
+				);
+				setResult(
+					response.data["Realtime Currency Exchange Rate"]["5. Exchange Rate"] *
+						amount
+				);
+				setPrimaryCurrencyExchanged(chosenPrimaryCurrency);
+				setSecondaryCurrencyExchanged(chosenSecondaryCurrency);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 	};
 
 	return (
@@ -110,13 +105,13 @@ const CurrencyConverter = () => {
 					</tbody>
 				</table>
 
-				<button id="convert-button" onClick={Convert}>
+				<button id="convert-button" onClick={convert}>
 					Convert
 				</button>
 			</div>
 
 			<ExchangeRate
-				exchangeRate={loading ? <ClipLoader /> : exchangeRate}
+				exchangeRate={exchangeRate}
 				chosenPrimaryCurrency={primaryCurrencyExchanged}
 				chosenSecondaryCurrency={secondaryCurrencyExchanged}
 			/>
