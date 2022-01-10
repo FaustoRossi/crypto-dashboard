@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Spinner from "react-bootstrap/Spinner";
 
 const NewsFeed = () => {
 	const [articles, setArticles] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const options = {
@@ -23,19 +25,21 @@ const NewsFeed = () => {
 			.catch((error) => {
 				console.error(error);
 			});
+		setLoading(true);
 	}, []);
 	const sevenArticles = articles?.slice(0, 5);
 
 	return (
 		<div className="news-feed">
 			<h2>News Feed</h2>
+
 			{sevenArticles?.map((article, _index) => (
 				<div key={_index}>
 					<a href={article.url}>
 						<p>{article.title}</p>
 					</a>
 				</div>
-			))}
+			))	}
 		</div>
 	);
 };

@@ -40,6 +40,14 @@ code {
 	flex-direction: row;
 }
 
+@media (max-width: 800px) {
+	.app {
+		flex-direction: column;
+	}
+}
+.currency-converter h2 {
+	margin-top: 50px;
+}
 .currency-converter {
 	background-color: rgb(230, 223, 211);
 	padding: 10px;

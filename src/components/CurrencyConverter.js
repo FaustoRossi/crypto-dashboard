@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ExchangeRate from "./ExchangeRate";
 import axios from "axios";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const CurrencyConverter = () => {
 	const currencies = ["BTC", "ETH", "USD", "XRP", "LTC", "ADA"];
@@ -9,42 +10,49 @@ const CurrencyConverter = () => {
 	const [amount, setAmount] = useState(1);
 	const [exchangeRate, setExchangeRate] = useState(0);
 	const [result, setResult] = useState(0);
-	const [primaryCurrencyExchanged, setPrimaryCurrencyExchanged] = useState(0);
+	const [primaryCurrencyExchanged, setPrimaryCurrencyExchanged] =
+		useState("BTC");
 	const [secondaryCurrencyExchanged, setSecondaryCurrencyExchanged] =
-		useState(0);
+		useState("BTC");
 
-	console.log(amount);
+	const [loading, setLoading] = useState(false);
 
-	const convert = () => {
-		const options = {
-			method: "GET",
-			url: "https://alpha-vantage.p.rapidapi.com/query",
-			params: {
-				from_currency: chosenPrimaryCurrency,
-				function: "CURRENCY_EXCHANGE_RATE",
-				to_currency: chosenSecondaryCurrency,
-			},
-			headers: {
-				"x-rapidapi-host": "alpha-vantage.p.rapidapi.com",
-				"x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY,
-			},
-		};
+	const Convert = () => {
+		useEffect(() => {
+			const options = {
+				method: "GET",
+				url: "https://alpha-vantage.p.rapidapi.com/query",
+				params: {
+					from_currency: chosenPrimaryCurrency,
+					function: "CURRENCY_EXCHANGE_RATE",
+					to_currency: chosenSecondaryCurrency,
+				},
+				headers: {
+					"x-rapidapi-host": "alpha-vantage.p.rapidapi.com",
+					"x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY,
+				},
+			};
 
-		axios
-			.request(options)
-			.then((response) => {
-				setExchangeRate(
-					response.data["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
-				);
-				setResult(
-					response.data["Realtime Currency Exchange Rate"]["5. Exchange Rate"] *
-						amount
-				);
-				setPrimaryCurrencyExchanged();
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+			axios
+				.request(options)
+				.then((response) => {
+					setExchangeRate(
+						response.data["Realtime Currency Exchange Rate"]["5. Exchange Rate"]
+					);
+					setResult(
+						response.data["Realtime Currency Exchange Rate"][
+							"5. Exchange Rate"
+						] * amount
+					);
+					setPrimaryCurrencyExchanged(chosenPrimaryCurrency);
+					setSecondaryCurrencyExchanged(chosenSecondaryCurrency);
+					setLoading(true);
+					setTimeout(setLoading(false), 1500);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		}, []);
 	};
 
 	return (
@@ -102,15 +110,15 @@ const CurrencyConverter = () => {
 					</tbody>
 				</table>
 
-				<button id="convert-button" onClick={convert}>
+				<button id="convert-button" onClick={Convert}>
 					Convert
 				</button>
 			</div>
 
 			<ExchangeRate
-				exchangeRate={exchangeRate}
-				chosenPrimaryCurrency={chosenPrimaryCurrency}
-				chosenSecondaryCurrency={chosenSecondaryCurrency}
+				exchangeRate={loading ? <ClipLoader /> : exchangeRate}
+				chosenPrimaryCurrency={primaryCurrencyExchanged}
+				chosenSecondaryCurrency={secondaryCurrencyExchanged}
 			/>
 		</div>
 	);
