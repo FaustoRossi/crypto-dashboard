@@ -7,7 +7,11 @@ import "./index.css";
 function App() {
 	return (
 		<div className="app">
-			<CurrencyConverter />
+			<div className="app-wrapper">
+				<h1> Crypto Dashboard</h1>
+
+				<CurrencyConverter />
+			</div>
 			<NewsFeed />
 		</div>
 	);

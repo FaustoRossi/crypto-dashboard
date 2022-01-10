@@ -24,11 +24,11 @@ const NewsFeed = () => {
 				console.error(error);
 			});
 	}, []);
-	const sevenArticles = articles?.slice(0, 7);
+	const sevenArticles = articles?.slice(0, 5);
 
 	return (
 		<div className="news-feed">
-			<h2>NewsFeed</h2>
+			<h2>News Feed</h2>
 			{sevenArticles?.map((article, _index) => (
 				<div key={_index}>
 					<a href={article.url}>

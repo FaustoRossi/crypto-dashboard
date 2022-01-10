@@ -7,10 +7,11 @@ function ExchangeRate({
 }) {
 	return (
 		<div className="exchange-rate">
-			<h1>ExchangeRate</h1>
+			<h1>Exchange Rate</h1>
 			<h1>{exchangeRate}</h1>
 			<p>
-				{chosenPrimaryCurrency} to {chosenSecondaryCurrency}</p>
+				{chosenPrimaryCurrency} to {chosenSecondaryCurrency}
+			</p>
 		</div>
 	);
 }
