@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ExchangeRate from "./ExchangeRate";
 import axios from "axios";
-import ClipLoader from "react-spinners/ClipLoader";
 
 const CurrencyConverter = () => {
 	const currencies = ["BTC", "ETH", "USD", "XRP", "LTC", "ADA"];
@@ -14,8 +13,6 @@ const CurrencyConverter = () => {
 		useState("BTC");
 	const [secondaryCurrencyExchanged, setSecondaryCurrencyExchanged] =
 		useState("BTC");
-
-	const [loading, setLoading] = useState(true);
 
 	const convert = () => {
 		const options = {
@@ -58,7 +55,7 @@ const CurrencyConverter = () => {
 				<table>
 					<tbody>
 						<tr>
-							<td>Primary Currency:</td>
+							<td>From: </td>
 							<td>
 								<input
 									type="number"
@@ -81,7 +78,7 @@ const CurrencyConverter = () => {
 							</td>
 						</tr>
 						<tr>
-							<td>Secondary Currency:</td>
+							<td>To: </td>
 							<td>
 								<input
 									name="currency-amount-2"

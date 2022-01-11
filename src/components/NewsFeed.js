@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Spinner from "react-bootstrap/Spinner";
 
 const NewsFeed = () => {
 	const [articles, setArticles] = useState(null);
-	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const options = {
@@ -25,7 +23,6 @@ const NewsFeed = () => {
 			.catch((error) => {
 				console.error(error);
 			});
-		setLoading(true);
 	}, []);
 	const sevenArticles = articles?.slice(0, 5);
 
@@ -39,7 +36,7 @@ const NewsFeed = () => {
 						<p>{article.title}</p>
 					</a>
 				</div>
-			))	}
+			))}
 		</div>
 	);
 };
